@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codex Study Hub - Home</title>
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --accent-color: #28a745;
+            --secondary-color: #6c757d;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --border-color: #e9ecef;
+            --animation-duration: 0.6s;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .app-shell {
+            width: 100%;
+            max-width: 800px;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            animation: fadeInScale var(--animation-duration) forwards ease-out;
+        }
+        @keyframes fadeInScale {
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+        .welcome-text {
+            font-size: 1.5rem;
+            color: #343a40;
+            margin: 0;
+        }
+        .user-name {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+        .logout-btn {
+            padding: 0.5rem 1rem;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .logout-btn:hover {
+            background-color: #495057;
+        }
+
+        /* --- Google Ad Banner --- */
+        #adBanner {
+            background-color: #f0f0f0;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+            min-height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- Unlock Widget --- */
+        .unlock-widget {
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(255, 152, 0, 0.3);
+        }
+        .unlock-widget h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        .unlock-widget p {
+            margin: 5px 0;
+            font-size: 0.95rem;
+        }
+        .unlock-input-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .unlock-input-group input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            text-transform: uppercase;
+        }
+        .unlock-input-group button {
+            padding: 10px 20px;
+            background-color: white;
+            color: #ff9800;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .unlock-input-group button:hover {
+            background-color: #ffe0b2;
+        }
+
+        /* --- Category Grid --- */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .category-card {
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-color);
+        }
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            color: var(--accent-color);
+        }
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #343a40;
+        }
+        .card-description {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            margin-top: 5px;
+        }
+
+        /* --- Lock Overlay --- */
+        .lock-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: white;
+            z-index: 10;
+        }
+        .lock-overlay.locked {
+            display: flex;
+        }
+        .lock-overlay-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        .lock-overlay-text {
+            font-weight: 600;
+            text-align: center;
+        }
+
+        /* --- Trial Badge --- */
+        .trial-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #ffc107;
+            color: #333;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* --- Success/Error Messages --- */
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .message.success {
+            display: block;
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .message.error {
+            display: block;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+<div style="margin:20px 0;">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-9642494442871029"
+         data-ad-slot="1273757400"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+</div>
+
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</head>
+<body>
+
+<div class="app-shell" id="homeAppShell">
+    <div class="header-section">
+        <h1 class="welcome-text">
+            Welcome, <span id="userName" class="user-name">Guest</span>!
+        </h1>
+        <button id="logoutBtn" class="logout-btn">Logout</button>
+    </div>
+
+    <!-- Google Ad Banner -->
+    <div id="adBanner">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-format="fluid"
+             data-ad-layout-key="-fb+5w+4e-db+86"
+             data-ad-client="ca-pub-9642494442871029"
+             data-ad-slot="1273757400"></ins>
+    </div>
+
+
+    <h2>Codex Study Hub Categories</h2>
+
+    <div class="category-grid">
+        <div class="category-card" onclick="goToCategory('notes')">
+            <div class="card-icon">📘</div>
+            <div class="card-title">Read / Study Notes</div>
+            <div class="card-description">Access short notes, definitions, and formulas.</div>
+        </div>
+
+        <div class="category-card" onclick="goToCategory('practice')">
+            <div class="card-icon">🧠</div>
+            <div class="card-title">Topic Practice</div>
+            <div class="card-description">Choose a specific topic and set your own questions.</div>
+        </div>
+
+        <div class="category-card" onclick="goToCategory('exam')">
+            <div class="card-icon">📝</div>
+            <div class="card-title">Exam Simulation</div>
+            <div class="card-description">Timed, 50-question mock exams (30 mins).</div>
+        </div>
+
+        <div class="category-card" onclick="goToCategory('profile')">
+            <div class="card-icon">📊</div>
+            <div class="card-title">Stats & Progress</div>
+            <div class="card-description">Track your scores, history, and weak topics.</div>
+        </div>
+    </div>
+
+<script>
+    const SESSION_KEY = 'loggedInUser';
+
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeHome();
+        pushAdsbygoogle();
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+
+    function initializeHome() {
+        const session = localStorage.getItem(SESSION_KEY);
+        
+        if (!session) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        try {
+            const userData = JSON.parse(session);
+            document.getElementById('userName').textContent = userData.fullName.split(' ')[0]; 
+        } catch (e) {
+            console.error("Error parsing user session:", e);
+            localStorage.removeItem(SESSION_KEY);
+            window.location.href = 'index.html';
+        }
+    }
+
+    
+    
+    function pushAdsbygoogle() {
+        if (window.adsbygoogle) {
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        }
+    }
+
+    function handleLogout() {
+        if (confirm('Are you sure you want to log out?')) {
+            localStorage.removeItem(SESSION_KEY);
+            window.location.href = 'Login.html';
+        }
+    }
+
+    function unlockFromHome() {
+        const key = document.getElementById('homeKeyInput').value.trim().toUpperCase();
+        const message = document.getElementById('unlockMessage');
+
+        if (!key) {
+            message.textContent = '❌ Please enter a verification key';
+            message.className = 'message error';
+            return;
+        }
+
+        const validKeys = [
+            'PREM-0001', 'PREM-0002', 'PREM-0003', 'PREM-0004', 'PREM-0005',
+            'PREM-0006', 'PREM-0007', 'PREM-0008', 'PREM-0009', 'PREM-0010',
+            'PREM-1234' // Demo key
+        ];
+
+        if (validKeys.includes(key)) {
+            alert('✓ Key is valid! Enter which subject to unlock:\n\nMTH101, PHY101, CHM101, COS101, STA111, STA121, BIO101, GST, GES151');
+            const subject = prompt('Enter subject code:').toUpperCase();
+            
+            if (subject) {
+                localStorage.setItem(`unlocked_${subject}`, 'true');
+                localStorage.setItem(`unlocked_time_${subject}`, new Date().toISOString());
+                message.textContent = `✓ ${subject} unlocked successfully! Start learning now.`;
+                message.className = 'message success';
+                document.getElementById('homeKeyInput').value = '';
+                
+                setTimeout(() => {
+                    window.location.href = `subject_selection.html?mode=practice`;
+                }, 2000);
+            }
+        } else {
+            message.textContent = '❌ Invalid key. Please check and try again.';
+            message.className = 'message error';
+        }
+    }
+
+    function goToCategory(mode) {
+        if (mode === 'notes') {
+            window.location.href = `subject_selection.html?mode=read`; 
+        } else if (mode === 'practice' || mode === 'exam') {
+            window.location.href = `subject_selection.html?mode=practice`;
+        } else if (mode === 'profile') {
+            window.location.href = 'stats.html';
+        }
+    }
+</script>
+</body>
+</html>
